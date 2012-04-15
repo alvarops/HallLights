@@ -1,6 +1,8 @@
 package com.robertdiamond.light;
 
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import com.digi.addp.AddpDevice;
 import com.digi.addp.AddpDeviceList;
 
 public class HallLightsActivity extends Activity {
+	Logger log = Logger.getLogger(HallLightsActivity.class.getName());
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,7 @@ public class HallLightsActivity extends Activity {
 				AddpDevice device = e.nextElement();
 
 				// do something with the device here
-				System.out.println(device.toString());
+				log.log(Level.INFO, device.toString());
 
 				// if device is not configured for DHCP, then turn it on and
 				// reboot.
@@ -40,6 +44,9 @@ public class HallLightsActivity extends Activity {
 					addpClient.rebootDevice(device, "dbps");
 				}
 			}
+		} else {
+			log.log(Level.INFO, "No device found, trying webclient");
+			
 		}
 	}
 }
