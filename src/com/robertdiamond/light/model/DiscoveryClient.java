@@ -20,13 +20,24 @@ import com.digi.addp.DeviceFoundListener;
 public class DiscoveryClient implements DeviceFoundListener {
 	private static final String TAG = "DiscoveryClient";
 	
-	ArrayList<AddpDevice> devices = new ArrayList<AddpDevice>();
-	
-	AddpClient addpClient = new AddpClient();
+	private ArrayList<AddpDevice>	devices = new ArrayList<AddpDevice>();
+	private AddpClient 				addpClient = new AddpClient();
+	private DeviceFoundListener 	listener;
 
+	public DiscoveryClient() {
+		
+	}
+	
+	public DiscoveryClient(DeviceFoundListener listener) {
+		super();
+		this.listener = listener;
+	}
+	
 	public ArrayList<Device> discover() {
 		AddpClient addpClient = new AddpClient();
 		ArrayList<Device> devices = new ArrayList<Device>();
+		
+		Log.d(TAG, "Discovering start");
 		
 		if (addpClient.SearchForDevices()) {
 			AddpDeviceList deviceList = addpClient.getDevices();
@@ -48,13 +59,15 @@ public class DiscoveryClient implements DeviceFoundListener {
 				
 				devices.add(myDevice);
 			}
+		} else {
+			Log.i(TAG, "No device found.");
 		}
 		
 		return devices;
 	}
 	
 	public void discoverAsync() {
-		addpClient.SearchForDevicesAsync(this);
+		addpClient.SearchForDevicesAsync(listener == null?this:listener);
 	}
 
 	/** 

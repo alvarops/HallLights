@@ -11,6 +11,7 @@ import com.robertdiamond.light.util.Settings;
 public class HallLightsActivity extends Activity {
 	private static final String TAG = "HallLightsActivity";
 	
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -23,17 +24,23 @@ public class HallLightsActivity extends Activity {
 		super.onStart();
 		Log.d(TAG, "starting");
 		
-		
 		Intent intent = new Intent(getApplicationContext(), DiscoveryActivity.class);
-		startActivityForResult(intent, 0);
+		startActivityForResult(intent, Settings.DISCOVERY);
 	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		String serverIP;
-		
-		serverIP = data.getStringExtra(Settings.IP);
-		
-		Settings.saveSetting(getApplicationContext(), Settings.IP, serverIP);
+		switch (requestCode) {
+		case Settings.DISCOVERY:
+			if (data != null) {
+				Settings.saveSetting(getApplicationContext(), Settings.IP, data.getStringExtra(Settings.IP));
+			}
+		break;
+		default:
+			
+		}
 	}
+
+	
+	
 }
