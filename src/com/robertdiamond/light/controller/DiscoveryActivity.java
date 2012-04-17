@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Alvaro Pereda - Robert Diamond
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
  */
 package com.robertdiamond.light.controller;
 
@@ -16,8 +16,8 @@ import com.robertdiamond.light.model.DiscoveryClient;
 import com.robertdiamond.light.util.Settings;
 
 /**
- * @author alvaroperedasancho
- * 
+ * @author Alvaro Pereda
+ *
  */
 public class DiscoveryActivity extends Activity implements DeviceFoundListener {
 	public static final String TAG = "DiscoveryActivity";

@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
+ */
 package com.robertdiamond.light.controller;
 
 import android.app.Activity;
@@ -8,6 +11,10 @@ import android.util.Log;
 import com.robertdiamond.light.R;
 import com.robertdiamond.light.util.Settings;
 
+/**
+ * @author Alvaro Pereda
+ *
+ */
 public class HallLightsActivity extends Activity {
 	private static final String TAG = "HallLightsActivity";
 	

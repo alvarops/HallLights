@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Alvaro Pereda - Robert Diamond
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
  */
 package com.robertdiamond.light.model;
 
@@ -28,11 +28,20 @@ public class DiscoveryClient implements DeviceFoundListener {
 		
 	}
 	
+	/**
+	 * Constructor with {@code DeviceFoundListener} callback.
+	 * @param listener
+	 */
 	public DiscoveryClient(DeviceFoundListener listener) {
 		super();
 		this.listener = listener;
 	}
 	
+	/**
+	 * Discover sync
+	 * 
+	 * @return list of {@code Device}
+	 */
 	public ArrayList<Device> discover() {
 		AddpClient addpClient = new AddpClient();
 		ArrayList<Device> devices = new ArrayList<Device>();
@@ -66,6 +75,9 @@ public class DiscoveryClient implements DeviceFoundListener {
 		return devices;
 	}
 	
+	/**
+	 * Discover async. Uses the callback defined in constructor, or self.
+	 */
 	public void discoverAsync() {
 		addpClient.SearchForDevicesAsync(listener == null?this:listener);
 	}
@@ -92,13 +104,13 @@ public class DiscoveryClient implements DeviceFoundListener {
 	 */
 	public void onSearchComplete() {
 		if (devices != null && devices.size() > 0) {
+	
 			Log.w(TAG, "Device found and stored.");
 			
 		} else {
+			
 			Log.w(TAG, "No device found, trying webclient.");
 			
 		}
 	}
-	
-	
 }
