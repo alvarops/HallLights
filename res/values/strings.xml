@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-
     <string name="hello">Hello World, HallLightsActivity!</string>
     <string name="app_name">HallLights</string>
-
+    <string name="discover">Discover</string>
+    <string name="choose_a_light">Choose a Light</string>
+    <string name="all_lights_off">All Lights Off</string>
+    <string name="all_lights_on">All Lights On</string>
+    <string name="choose_a_color">Choose a Color</string>
 </resources>
