@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Alvaro Pereda - Robert Diamond
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
  */
 package com.robertdiamond.light.model;
 
@@ -9,7 +9,7 @@ import android.os.Parcelable;
 import com.digi.addp.AddpDevice;
 
 /**
- * @author alvaroperedasancho
+ * @author Alvaro Pereda
  * 
  */
 public class Device implements Parcelable {

@@ -1,3 +1,6 @@
+/*
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
+ */
 package com.robertdiamond.light.controller;
 
 import android.app.Activity;
@@ -14,6 +17,10 @@ import com.robertdiamond.light.util.Settings;
 import com.robertdiamond.light.view.ColorPickerDialog;
 import com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener;
 
+/**
+ * @author Alvaro Pereda
+ *
+ */
 public class HallLightsActivity extends Activity implements OnColorChangedListener {
 	private static final String TAG = "HallLightsActivity";
 
@@ -56,7 +63,7 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 		switch (item.getItemId()) {
 		case MENU_DISCOVER:
 			Intent intent = new Intent(getApplicationContext(), DiscoveryActivity.class);
-			startActivityForResult(intent, 0);
+			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
 		case MENU_ITEM_1:
 			// put your code here
@@ -69,11 +76,15 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		String serverIP;
-
-		serverIP = data.getStringExtra(Settings.IP);
-
-		Settings.saveSetting(getApplicationContext(), Settings.IP, serverIP);
+		switch (requestCode) {
+		case Settings.DISCOVERY:
+			if (data != null) {
+				Settings.saveSetting(getApplicationContext(), Settings.IP, data.getStringExtra(Settings.IP));
+			}
+		break;
+		default:
+			
+		}
 	}
 
 	public void onSelectColorClicked(View view) {
@@ -88,4 +99,5 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 		// TODO Auto-generated method stub
 		
 	}
+
 }

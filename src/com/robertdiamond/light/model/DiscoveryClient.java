@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Alvaro Pereda - Robert Diamond
+ * Copyright (C) 2012 Alvaro Pereda - Robert Diamond - Jennifer Casavantes
  */
 package com.robertdiamond.light.model;
 
@@ -20,13 +20,33 @@ import com.digi.addp.DeviceFoundListener;
 public class DiscoveryClient implements DeviceFoundListener {
 	private static final String TAG = "DiscoveryClient";
 	
-	ArrayList<AddpDevice> devices = new ArrayList<AddpDevice>();
-	
-	AddpClient addpClient = new AddpClient();
+	private ArrayList<AddpDevice>	devices = new ArrayList<AddpDevice>();
+	private AddpClient 				addpClient = new AddpClient();
+	private DeviceFoundListener 	listener;
 
+	public DiscoveryClient() {
+		
+	}
+	
+	/**
+	 * Constructor with {@code DeviceFoundListener} callback.
+	 * @param listener
+	 */
+	public DiscoveryClient(DeviceFoundListener listener) {
+		super();
+		this.listener = listener;
+	}
+	
+	/**
+	 * Discover sync
+	 * 
+	 * @return list of {@code Device}
+	 */
 	public ArrayList<Device> discover() {
 		AddpClient addpClient = new AddpClient();
 		ArrayList<Device> devices = new ArrayList<Device>();
+		
+		Log.d(TAG, "Discovering start");
 		
 		if (addpClient.SearchForDevices()) {
 			AddpDeviceList deviceList = addpClient.getDevices();
@@ -48,13 +68,18 @@ public class DiscoveryClient implements DeviceFoundListener {
 				
 				devices.add(myDevice);
 			}
+		} else {
+			Log.i(TAG, "No device found.");
 		}
 		
 		return devices;
 	}
 	
+	/**
+	 * Discover async. Uses the callback defined in constructor, or self.
+	 */
 	public void discoverAsync() {
-		addpClient.SearchForDevicesAsync(this);
+		addpClient.SearchForDevicesAsync(listener == null?this:listener);
 	}
 
 	/** 
@@ -79,13 +104,13 @@ public class DiscoveryClient implements DeviceFoundListener {
 	 */
 	public void onSearchComplete() {
 		if (devices != null && devices.size() > 0) {
+	
 			Log.w(TAG, "Device found and stored.");
 			
 		} else {
+			
 			Log.w(TAG, "No device found, trying webclient.");
 			
 		}
 	}
-	
-	
 }
