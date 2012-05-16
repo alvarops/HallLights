@@ -25,6 +25,8 @@ public class Device implements Parcelable {
 
 	public Device(AddpDevice device) {
 		this.device = device;
+		this.name = device.getDeviceID();
+		this.ip = device.getIPAddress().toString();
 	}
 	
 	public Device(Parcel in) {
@@ -63,6 +65,10 @@ public class Device implements Parcelable {
 		dest.writeBooleanArray(new boolean []{selected});
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
 	/**
 	 * @return the name
 	 */
