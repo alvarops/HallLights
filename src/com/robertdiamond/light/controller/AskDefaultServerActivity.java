@@ -10,5 +10,6 @@ import android.app.Activity;
  *
  */
 public class AskDefaultServerActivity extends Activity {
+	
 
 }

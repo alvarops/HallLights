@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
  *
  */
 public class Settings {
-	public static final int DISCOVERY = 0, GET_SERVER = 1, CHOOSE_DEVICE = 2;
+	public static final int DISCOVERY = 0, GET_SERVER = 1, SELECT_DEVICE = 2;
 	
 	public static final String PREFS_NAME = "LightsFile";
 	public static final String IP = "IP";

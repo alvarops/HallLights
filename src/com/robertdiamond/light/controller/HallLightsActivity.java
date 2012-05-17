@@ -62,7 +62,7 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_DISCOVER:
-			Intent intent = new Intent(getApplicationContext(), DiscoveryActivity.class);
+			Intent intent = new Intent(this, DiscoveryActivity.class);
 			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
 		case MENU_ITEM_1:
@@ -99,5 +99,4 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 		// TODO Auto-generated method stub
 		
 	}
-
 }
