@@ -3,6 +3,8 @@
  */
 package com.robertdiamond.light.controller;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,27 +13,47 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.robertdiamond.light.R;
+import com.robertdiamond.light.model.LightScheme;
 import com.robertdiamond.light.util.Settings;
 import com.robertdiamond.light.view.ColorPickerDialog;
 import com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener;
 
 /**
  * @author Alvaro Pereda
- *
+ * 
  */
-public class HallLightsActivity extends Activity implements OnColorChangedListener {
+public class HallLightsActivity extends Activity {
 	private static final String TAG = "HallLightsActivity";
 
 	private static final int MENU_DISCOVER = 0;
 	private static final int MENU_ITEM_1 = 1;
+
+	private LightScheme lightScheme;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+
+		this.lightScheme = new LightScheme();
+
+		OnCheckedChangeListener radioGroupListener = new OnCheckedChangeListener() {
+
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				HallLightsActivity.this.lightScheme
+						.setLightsOn(checkedId == R.id.rb_lights_on);
+			}
+
+		};
+
+		final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_all_lights);
+		radioGroup.setOnCheckedChangeListener(radioGroupListener);
+
 	}
 
 	@Override
@@ -66,10 +88,10 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
 		case MENU_ITEM_1:
-			// put your code here
+
 			break;
 		default:
-			// put your code here
+
 		}
 		return false;
 	}
@@ -79,24 +101,48 @@ public class HallLightsActivity extends Activity implements OnColorChangedListen
 		switch (requestCode) {
 		case Settings.DISCOVERY:
 			if (data != null) {
-				Settings.saveSetting(getApplicationContext(), Settings.IP, data.getStringExtra(Settings.IP));
+				Settings.saveSetting(getApplicationContext(), Settings.IP,
+						data.getStringExtra(Settings.IP));
 			}
-		break;
+			break;
 		default:
-			
+
 		}
 	}
 
+	/**
+	 * The user wants to change the light's color
+	 * @param view
+	 */
 	public void onSelectColorClicked(View view) {
-		ColorPickerDialog dialog = new ColorPickerDialog(this, this, Color.RED);
+		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, Color.RED,
+				new OnAmbilWarnaListener() {
+
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						HallLightsActivity.this.lightScheme.setColor(color);
+					}
+
+					public void onCancel(AmbilWarnaDialog dialog) {
+						// cancel was selected by the user
+					}
+				});
+
+		dialog.show();
+	}
+	
+	/**
+	 * Old color selector Dialog
+	 * @param view
+	 */
+	public void onRoundSelectColorClicked(View view) {
+		ColorPickerDialog dialog = new ColorPickerDialog(getApplicationContext(), new OnColorChangedListener() {
+			
+			public void colorChanged(int color) {
+				HallLightsActivity.this.lightScheme.setColor(color);
+			}
+			
+		}, Color.RED);
 		dialog.show();
 	}
 
-	/** 
-	 * @see com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener#colorChanged(int)
-	 */
-	public void colorChanged(int color) {
-		// TODO Auto-generated method stub
-		
-	}
 }
