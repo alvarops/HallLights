@@ -35,5 +35,4 @@
         android:layout_height="wrap_content"
         android:onClick="onSelectColorClicked"
         android:text="@string/choose_a_color" />
-
 </LinearLayout>

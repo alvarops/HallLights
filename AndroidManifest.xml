@@ -12,5 +12,7 @@
         </activity>
         <activity android:name=".controller.DiscoveryActivity"/>
         <activity android:name=".controller.SelectDeviceActivity"/>
+        <activity android:name=".controller.AskDefaultServerActivity" android:theme="@android:style/Theme.Dialog"/>
+        <service android:name=".DiscoveryService"/>
     </application>
 </manifest>
