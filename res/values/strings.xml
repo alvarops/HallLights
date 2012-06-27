@@ -34,4 +34,6 @@
     <string name="choose_a_device">Choose one device in the list</string>
     <string name="server_name_selected">Selected device: %1$s. </string>
     <string name="no_server_selected">No server selected</string>
+    <string name="apply_changes">Apply changes</string>
+    <string name="dialog_progress_loading">Loading...</string>
 </resources>

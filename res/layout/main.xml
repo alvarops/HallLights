@@ -35,4 +35,12 @@
         android:layout_height="wrap_content"
         android:onClick="onSelectColorClicked"
         android:text="@string/choose_a_color" />
+    
+	<Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onApply"
+        android:text="@string/apply_changes" />
+        
 </LinearLayout>
