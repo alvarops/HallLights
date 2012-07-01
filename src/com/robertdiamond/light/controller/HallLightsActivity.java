@@ -3,15 +3,12 @@
  */
 package com.robertdiamond.light.controller;
 
-import java.io.InputStream;
-
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,9 +18,11 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.robertdiamond.light.R;
-import com.robertdiamond.light.model.Light;
+import com.robertdiamond.light.controller.tasks.QueryStatusTask;
+import com.robertdiamond.light.controller.tasks.QueryStatusTask.QueryStatusListener;
 import com.robertdiamond.light.model.LightScheme;
 import com.robertdiamond.light.model.Lights;
+import com.robertdiamond.light.util.BaseInterface;
 import com.robertdiamond.light.util.Settings;
 import com.robertdiamond.light.view.ColorPickerDialog;
 import com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener;
@@ -32,13 +31,17 @@ import com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener;
  * @author Alvaro Pereda
  * 
  */
-public class HallLightsActivity extends BaseActivity {
+public class HallLightsActivity extends Activity implements QueryStatusListener, BaseInterface {
 	private static final String TAG = "HallLightsActivity";
 
 	private static final int MENU_DISCOVER = 0;
 	private static final int MENU_ITEM_1 = 1;
 
 	private LightScheme lightScheme;
+
+	private QueryStatusTask statusTask;
+
+	private BaseImplement baseInterface;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -59,7 +62,7 @@ public class HallLightsActivity extends BaseActivity {
 
 		final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_all_lights);
 		radioGroup.setOnCheckedChangeListener(radioGroupListener);
-
+		this.baseInterface = new BaseImplement(getBaseContext());
 	}
 
 	@Override
@@ -94,25 +97,17 @@ public class HallLightsActivity extends BaseActivity {
 			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
 		case MENU_ITEM_1:
-			Serializer serializer = new Persister();
-			InputStream inputStream = getBaseContext().getResources().openRawResource(R.raw.example);
-			try {
-				Lights example = serializer.read(Lights.class, inputStream);
-				
-				for (Light light: example.getLights()) {
-					System.out.println(light.getNodeId());
-				}
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			statusTask = new QueryStatusTask(this, getApplicationContext());
+			showLoading(statusTask);
+			
 			break;
 		default:
 
 		}
 		return false;
 	}
+	
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -165,6 +160,35 @@ public class HallLightsActivity extends BaseActivity {
 	
 	public void onApply(View view) {
 		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.robertdiamond.light.controller.tasks.QueryStatusTask.QueryStatusListener#onStatusReceived(com.robertdiamond.light.model.Lights)
+	 */
+	public void onStatusReceived(Lights lights) {
+		hideLoading();
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.robertdiamond.light.util.BaseInterface#showLoading(android.os.AsyncTask)
+	 */
+	public void showLoading(AsyncTask<?, ?, ?> task) {
+		baseInterface.showLoading(task);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.robertdiamond.light.util.BaseInterface#showLoading(java.lang.String, android.os.AsyncTask)
+	 */
+	public void showLoading(String progressText, AsyncTask<?, ?, ?> task) {
+		baseInterface.showLoading(progressText, task);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.robertdiamond.light.util.BaseInterface#hideLoading()
+	 */
+	public void hideLoading() {
+		baseInterface.hideLoading();
 	}
 
 }

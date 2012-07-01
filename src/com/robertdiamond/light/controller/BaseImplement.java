@@ -3,22 +3,28 @@
  */
 package com.robertdiamond.light.controller;
 
-import com.robertdiamond.light.R;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+
+import com.robertdiamond.light.R;
+import com.robertdiamond.light.util.BaseInterface;
 
 /**
  * @author Alvaro Pereda
  * 
  */
-public class BaseActivity extends Activity {
+public class BaseImplement implements BaseInterface {
 	boolean loading = false;
 	ProgressDialog progressDialog;
 	protected Object currentTaskLoading;
 	protected boolean taskCanceled;
+	private Context context;
+	
+	public BaseImplement(Context context) {
+		this.context = context;
+	}
 
 	/**
 	 * Show the loading progress dialog with dialog_progress_loading string
@@ -26,8 +32,8 @@ public class BaseActivity extends Activity {
 	 * @param task
 	 *            - AsyncTask<?, ?, ?>
 	 */
-	protected void showLoading(AsyncTask<?, ?, ?> task) {
-		showLoading(getString(R.string.dialog_progress_loading), task);
+	public void showLoading(AsyncTask<?, ?, ?> task) {
+		showLoading(context.getString(R.string.dialog_progress_loading), task);
 	}
 
 	/**
@@ -38,10 +44,10 @@ public class BaseActivity extends Activity {
 	 * @param task
 	 *            - AsyncTask<?, ?, ?> task that can be cancelled
 	 */
-	protected void showLoading(String progressText,
+	public void showLoading(String progressText,
 			final AsyncTask<?, ?, ?> task) {
 		if (!loading) {
-			progressDialog = ProgressDialog.show(this, "", progressText, true);
+			progressDialog = ProgressDialog.show(context, "", progressText, true);
 			progressDialog.setCancelable(true);
 			progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
 
@@ -63,7 +69,7 @@ public class BaseActivity extends Activity {
 	/**
      * Hide the current AlertDialog(progressDialog)
      */
-    protected void hideLoading(){
+    public void hideLoading(){
           progressDialog.dismiss();
           loading = false;
     }
