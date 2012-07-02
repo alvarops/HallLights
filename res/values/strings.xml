@@ -35,5 +35,7 @@
     <string name="server_name_selected">Selected device: %1$s. </string>
     <string name="no_server_selected">No server selected</string>
     <string name="apply_changes">Apply changes</string>
-    <string name="dialog_progress_loading">Loading...</string>
+    <string name="dialog_progress_loading">Loading…</string>
+    <string name="get_server_status">Fetch status</string>
+    <string name="no_data">No data</string>
 </resources>

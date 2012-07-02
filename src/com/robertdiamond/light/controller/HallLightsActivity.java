@@ -5,7 +5,7 @@ package com.robertdiamond.light.controller;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -20,6 +20,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import com.robertdiamond.light.R;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask.QueryStatusListener;
+import com.robertdiamond.light.model.Light;
 import com.robertdiamond.light.model.LightScheme;
 import com.robertdiamond.light.model.Lights;
 import com.robertdiamond.light.util.BaseInterface;
@@ -31,11 +32,11 @@ import com.robertdiamond.light.view.ColorPickerDialog.OnColorChangedListener;
  * @author Alvaro Pereda
  * 
  */
-public class HallLightsActivity extends Activity implements QueryStatusListener, BaseInterface {
+public class HallLightsActivity extends ListActivity implements QueryStatusListener, BaseInterface {
 	private static final String TAG = "HallLightsActivity";
 
 	private static final int MENU_DISCOVER = 0;
-	private static final int MENU_ITEM_1 = 1;
+	private static final int MENU_QUERY_STATUS = 1;
 
 	private LightScheme lightScheme;
 
@@ -62,7 +63,7 @@ public class HallLightsActivity extends Activity implements QueryStatusListener,
 
 		final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_all_lights);
 		radioGroup.setOnCheckedChangeListener(radioGroupListener);
-		this.baseInterface = new BaseImplement(getBaseContext());
+		this.baseInterface = new BaseImplement(this);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class HallLightsActivity extends Activity implements QueryStatusListener,
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MENU_DISCOVER, 0, R.string.discover);
-		menu.add(0, MENU_ITEM_1, 0, "Menu Item 1");
+		menu.add(0, MENU_QUERY_STATUS, 0, R.string.get_server_status);
 		return true;
 	}
 
@@ -96,10 +97,10 @@ public class HallLightsActivity extends Activity implements QueryStatusListener,
 			Intent intent = new Intent(this, DiscoveryActivity.class);
 			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
-		case MENU_ITEM_1:
+		case MENU_QUERY_STATUS:
 			statusTask = new QueryStatusTask(this, getApplicationContext());
 			showLoading(statusTask);
-			
+			statusTask.execute();
 			break;
 		default:
 
@@ -151,7 +152,11 @@ public class HallLightsActivity extends Activity implements QueryStatusListener,
 		ColorPickerDialog dialog = new ColorPickerDialog(getApplicationContext(), new OnColorChangedListener() {
 			
 			public void colorChanged(int color) {
-				HallLightsActivity.this.lightScheme.setColor(color);
+				//HallLightsActivity.this.lightScheme.setColor(color);
+				Light light = new Light();
+				light.setBlue(Color.blue(color));
+				light.setRed(Color.red(color));
+				light.setGreen(Color.green(color));
 			}
 			
 		}, Color.RED);
@@ -167,6 +172,9 @@ public class HallLightsActivity extends Activity implements QueryStatusListener,
 	 */
 	public void onStatusReceived(Lights lights) {
 		hideLoading();
+		for (Light light:lights.getLights()) {
+			Color.rgb(light.getRed(), light.getGreen(), light.getBlue());
+		}
 		
 	}
 

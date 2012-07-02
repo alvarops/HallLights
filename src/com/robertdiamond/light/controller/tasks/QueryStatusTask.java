@@ -33,7 +33,7 @@ public class QueryStatusTask extends AsyncTask<URL, Void, Lights> {
 		Lights lights = null;
 		
 		try {
-			lights = (Lights) HTTPUtil.fetchURL("http://diamond.homelinux.com:2525/query", Lights.class);
+			lights = (Lights) HTTPUtil.fetchURL("http://growing-rain-1729.heroku.com/pages/lights/query", Lights.class);
 			
 			for (Light light: lights.getLights()) {
 				System.out.println(light.getNodeId());
