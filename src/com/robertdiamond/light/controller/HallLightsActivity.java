@@ -21,7 +21,6 @@ import com.robertdiamond.light.R;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask.QueryStatusListener;
 import com.robertdiamond.light.model.Light;
-import com.robertdiamond.light.model.LightScheme;
 import com.robertdiamond.light.model.Lights;
 import com.robertdiamond.light.util.BaseInterface;
 import com.robertdiamond.light.util.Settings;
@@ -124,14 +123,20 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	 * The user wants to change the light's color
 	 * @param view
 	 */
-	public void onSelectColorClicked(View view) {
-		Integer color = (Integer) view.getTag();
+	public void onSelectColorClicked(final View view) {
+		int position = (Integer) view.getTag();
+		final Light light = adapter.getItem(position);
+		Integer color = Color.rgb(light.getRed(), light.getGreen(),
+				light.getBlue());
 		
 		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, color,
 				new OnAmbilWarnaListener() {
 
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						Log.d(TAG, "Changing color");
+						light.setBlue(Color.blue(color));
+						light.setGreen(Color.green(color));
+						light.setRed(Color.red(color));
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {

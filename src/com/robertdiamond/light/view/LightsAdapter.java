@@ -82,7 +82,7 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			holder.nodeId.setText(nodeId);
 			holder.speed.setText(Integer.toString(speed));
 			holder.speedBar.setProgress(speed);
-			holder.colorButton.setTag(color);
+			holder.colorButton.setTag(position);
 			convertView.setBackgroundColor(color);
 			
 		} catch (Exception e) {

@@ -51,30 +51,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:visibility = "invisible" />
+            android:visibility="invisible" />
 
         <SeekBar
             android:id="@+id/speedBar"
             android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:max="200"
-      		android:maxHeight="3dp"
-     		android:paddingLeft="10dp"
-      		android:paddingRight="10dp"
-      		android:layout_height="wrap_content" />
+            android:maxHeight="3dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/color_button"
+    <LinearLayout
+        android:id="@+id/buttonsLinearLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onSelectColorClicked"
-        android:text="@string/choose_a_color" />
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onApply"
-        android:text="@string/apply_changes" />
+        <Button
+            android:id="@+id/color_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onSelectColorClicked"
+            android:text="@string/choose_a_color" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onApply"
+            android:text="@string/apply_changes" />
+    </LinearLayout>
 
 </LinearLayout>
