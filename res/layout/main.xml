@@ -13,7 +13,6 @@
         android:id="@+id/node_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Room"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <RadioGroup
@@ -39,29 +38,33 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speed"
+        android:text="@string/speed"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:id="@+id/speed_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:visibility = "invisible" />
 
         <SeekBar
             android:id="@+id/speedBar"
-            android:layout_width="315dp"
-            android:layout_height="wrap_content" />
+            android:layout_width="fill_parent"
+            android:max="200"
+      		android:maxHeight="3dp"
+     		android:paddingLeft="10dp"
+      		android:paddingRight="10dp"
+      		android:layout_height="wrap_content" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/color_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onSelectColorClicked"
