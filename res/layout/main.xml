@@ -5,6 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/choose_a_light"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/choose_a_light" />
@@ -35,7 +36,7 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txt_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/speed"

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.robertdiamond.light.R;
 import com.robertdiamond.light.model.Light;
+import com.robertdiamond.light.util.ColorUtil;
 
 /**
  * @author Alvaro Pereda
@@ -57,18 +58,18 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			if (convertView == null) {
 				convertView = this.inflator.inflate(layout, null);
 				holder = new ViewHolder();
-				holder.nodeId = (TextView) convertView
-						.findViewById(R.id.node_id);
+				holder.nodeId = (TextView) convertView.findViewById(R.id.node_id);
 				holder.speed = (TextView) convertView.findViewById(R.id.speed);
-				holder.speedBar = (SeekBar) convertView
-						.findViewById(R.id.speedBar);
-				holder.colorButton = (Button) convertView
-						.findViewById(R.id.color_button);
-				holder.radioGroup = (RadioGroup) convertView
-						.findViewById(R.id.rg_all_lights);
-				holder.radioGroup
-						.setOnCheckedChangeListener(radioGroupListener);
+				holder.speedBar = (SeekBar) convertView.findViewById(R.id.speedBar);
+				holder.colorButton = (Button) convertView.findViewById(R.id.color_button);
+				holder.radioGroup = (RadioGroup) convertView.findViewById(R.id.rg_all_lights);
+				holder.radioGroup.setOnCheckedChangeListener(radioGroupListener);
 				holder.speedBar.setOnTouchListener(new SeekBarListener(holder));
+				
+				/* Text Strings */
+				holder.text_chooseALight = (TextView) convertView.findViewById(R.id.choose_a_light);
+				holder.text_speed = (TextView) convertView.findViewById(R.id.txt_speed);
+				
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -86,6 +87,15 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			holder.colorButton.setTag(position);
 			convertView.setBackgroundColor(color);
 			
+			/* Set contrasted color for text */
+			int contrastColor = ColorUtil.getBestContrast(color);
+			int contrastGrey = ColorUtil.getBestGrayContrast(color);
+			
+			holder.nodeId.setTextColor(contrastColor);
+			holder.text_chooseALight.setTextColor(contrastColor);
+			holder.text_speed.setTextColor(contrastColor);
+			holder.speed.setTextColor(contrastGrey);
+			
 		} catch (Exception e) {
 			Log.e(TAG, e.toString(), e);
 		}
@@ -93,12 +103,14 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 	}
 
 	static class ViewHolder {
+		TextView text_speed;
 		RadioGroup radioGroup;
 		Button colorButton;
 		TextView nodeId;
 		TextView speed;
 		SeekBar speedBar;
-
+		TextView text_chooseALight;
+		
 	}
 
 	class SeekBarListener implements OnTouchListener {
