@@ -18,6 +18,8 @@ public class Settings {
 	public static final String DEFAULT_DEVICE = "DefaultDevice";
 	public static final String DEVICE_LIST = "DeviceList";
 
+	public static final String LIGHTS = "Lights";
+
 	/**
 	 * Saves the Setting in the {@code SharedPreferences}
 	 * @param context

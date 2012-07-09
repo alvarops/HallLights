@@ -22,7 +22,7 @@ import com.robertdiamond.light.R;
 import com.robertdiamond.light.model.Light;
 
 /**
- * @author alvaroperedasancho
+ * @author Alvaro Pereda
  * 
  */
 public class LightsAdapter extends ArrayAdapter<Light> {
@@ -82,6 +82,7 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			holder.nodeId.setText(nodeId);
 			holder.speed.setText(Integer.toString(speed));
 			holder.speedBar.setProgress(speed);
+			holder.speedBar.setTag(position);
 			holder.colorButton.setTag(position);
 			convertView.setBackgroundColor(color);
 			
@@ -115,6 +116,8 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 				holder.speed.setText(Integer.toString(holder.speedBar.getProgress()));
 			} else if (event.getAction() == MotionEvent.ACTION_UP) {
+				int position = (Integer) v.getTag();
+				getItem(position).setSpeed(holder.speedBar.getProgress());
 				holder.speed.setVisibility(View.INVISIBLE);
 			}
 			return false;

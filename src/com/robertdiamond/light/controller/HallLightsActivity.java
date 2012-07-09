@@ -42,6 +42,8 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	private BaseImplement baseInterface;
 	private LightsAdapter adapter;
 
+	private Lights lights;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,11 +52,21 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 
 		this.baseInterface = new BaseImplement(this);
 		this.adapter = new LightsAdapter(this, R.layout.main, R.id.node_id);
-		statusTask = new QueryStatusTask(this, getApplicationContext());
-		showLoading(statusTask);
-		statusTask.execute();
-		
 		setListAdapter(this.adapter);
+		
+		if (savedInstanceState != null && savedInstanceState.containsKey(Settings.LIGHTS)) {
+		
+			this.lights = (Lights) savedInstanceState.getSerializable(Settings.LIGHTS);
+			updateAdapter(this.lights);
+		
+		} else {
+			
+			statusTask = new QueryStatusTask(this, getApplicationContext());
+			showLoading(statusTask);
+			statusTask.execute();
+	
+		}
+		
 	}
 
 	@Override
@@ -115,6 +127,11 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		}
 	}
 	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable(Settings.LIGHTS, lights);
+	}
+	
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		// TODO switch all the lights on/off
 	}
@@ -137,6 +154,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 						light.setBlue(Color.blue(color));
 						light.setGreen(Color.green(color));
 						light.setRed(Color.red(color));
+						adapter.notifyDataSetChanged();
 					}
 
 					public void onCancel(AmbilWarnaDialog dialog) {
@@ -152,18 +170,18 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	 * @param view
 	 */
 	public void onRoundSelectColorClicked(View view) {
-		Integer color = (Integer) view.getTag();
+		final Light light = (Light) view.getTag();
+		
 		ColorPickerDialog dialog = new ColorPickerDialog(getApplicationContext(), new OnColorChangedListener() {
 			
 			public void colorChanged(int color) {
-				//HallLightsActivity.this.lightScheme.setColor(color);
-				Light light = new Light();
 				light.setBlue(Color.blue(color));
 				light.setRed(Color.red(color));
 				light.setGreen(Color.green(color));
+				adapter.notifyDataSetChanged();
 			}
 			
-		}, color);
+		}, Color.rgb(light.getRed(), light.getGreen(),light.getBlue()));
 		dialog.show();
 	}
 	
@@ -176,11 +194,19 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	 */
 	public void onStatusReceived(Lights lights) {
 		hideLoading();
+		this.lights = lights;
 		
+		updateAdapter(lights);
+		
+	}
+
+	/**
+	 * @param lights
+	 */
+	private void updateAdapter(Lights lights) {
 		for (Light light:lights.getLights()) {
 			adapter.add(light);
 		}
-		
 	}
 
 	/* (non-Javadoc)
