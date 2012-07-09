@@ -15,26 +15,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <RadioGroup
-        android:id="@+id/rg_all_lights"
-        android:layout_width="fill_parent"
+    
+    <ToggleButton
+        android:id="@+id/toggleLights"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <RadioButton
-            android:id="@+id/rb_lights_on"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all_lights_on" />
-
-        <RadioButton
-            android:id="@+id/rb_lights_off"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all_lights_off" />
-    </RadioGroup>
-
+        android:textOn="@string/turn_off_the_lights"
+        android:textOff="@string/turn_on_the_lights"
+		android:onClick="onToggleLightsClicked"/>
+    
     <TextView
         android:id="@+id/txt_speed"
         android:layout_width="wrap_content"

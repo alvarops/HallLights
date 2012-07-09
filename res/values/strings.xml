@@ -39,4 +39,9 @@
     <string name="get_server_status">Fetch status</string>
     <string name="no_data">No data</string>
     <string name="speed">Speed</string>
+    <string name="lights_are">Lights are: </string>
+    <string name="turn_off_the_lights">Turn OFF the lights</string>
+    <string name="turn_on_the_lights">Turn ON the lights</string>
+    <string name="lights_updated">Lights updated</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

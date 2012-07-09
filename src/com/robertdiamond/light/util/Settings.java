@@ -13,6 +13,11 @@ import android.content.SharedPreferences;
 public class Settings {
 	public static final int DISCOVERY = 0, GET_SERVER = 1, SELECT_DEVICE = 2;
 	
+	public static final String BASE_URL = "http://growing-rain-1729.heroku.com/pages/lights";
+	public static final String BASE_URL_SET = "?red=%d&green=%d&blue=%d&speed=%d&node=%s";
+	public static final String BASE_URL_QUERY = "/query";
+	
+	
 	public static final String PREFS_NAME = "LightsFile";
 	public static final String IP = "IP";
 	public static final String DEFAULT_DEVICE = "DefaultDevice";

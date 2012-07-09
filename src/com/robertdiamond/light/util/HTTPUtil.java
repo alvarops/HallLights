@@ -53,4 +53,22 @@ public class HTTPUtil {
 		}
 		
 	}
+	
+	public static boolean getURL(String path) throws Exception {
+		HttpURLConnection urlConnection = null;
+		
+		try {
+			URL url;
+			Serializer serializer;
+			InputStream in;
+			
+			url = new URL(path);
+			urlConnection = (HttpURLConnection) url.openConnection();
+			
+			return (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK);
+			
+		} finally {
+			urlConnection.disconnect();
+		}
+	}
 }

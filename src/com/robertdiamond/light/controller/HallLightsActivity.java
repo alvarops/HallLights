@@ -14,12 +14,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.Toast;
 
 import com.robertdiamond.light.R;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask;
 import com.robertdiamond.light.controller.tasks.QueryStatusTask.QueryStatusListener;
+import com.robertdiamond.light.controller.tasks.SetStatusTask;
+import com.robertdiamond.light.controller.tasks.SetStatusTask.SetStatusListener;
 import com.robertdiamond.light.model.Light;
 import com.robertdiamond.light.model.Lights;
 import com.robertdiamond.light.util.BaseInterface;
@@ -32,17 +33,20 @@ import com.robertdiamond.light.view.LightsAdapter;
  * @author Alvaro Pereda
  * 
  */
-public class HallLightsActivity extends ListActivity implements QueryStatusListener, BaseInterface, OnCheckedChangeListener {
+public class HallLightsActivity extends ListActivity implements QueryStatusListener, BaseInterface, SetStatusListener {
 	private static final String TAG = "HallLightsActivity";
 
 	private static final int MENU_DISCOVER = 0;
 	private static final int MENU_QUERY_STATUS = 1;
 
-	private QueryStatusTask statusTask;
+	@SuppressWarnings("rawtypes")
+	private AsyncTask statusTask;
 	private BaseImplement baseInterface;
 	private LightsAdapter adapter;
 
 	private Lights lights;
+
+	private View toggleButton;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -61,9 +65,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		
 		} else {
 			
-			statusTask = new QueryStatusTask(this, getApplicationContext());
-			showLoading(statusTask);
-			statusTask.execute();
+			fetchStatus();
 	
 		}
 		
@@ -101,9 +103,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 			startActivityForResult(intent, Settings.DISCOVERY);
 			break;
 		case MENU_QUERY_STATUS:
-			statusTask = new QueryStatusTask(this, getApplicationContext());
-			showLoading(statusTask);
-			statusTask.execute();
+			fetchStatus();
 			break;
 		default:
 
@@ -132,10 +132,40 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		outState.putSerializable(Settings.LIGHTS, lights);
 	}
 	
-	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		// TODO switch all the lights on/off
+	/**
+	 * The user wants to turn the lights on / off 
+	 * @param view
+	 */
+	public void onToggleLightsClicked(final View view) {
+		int position = (Integer) view.getTag();
+		Light light = adapter.getItem(position);
+		
+		this.toggleButton = view;
+		
+		view.setEnabled(false);
+		statusTask = new SetStatusTask(this, getApplicationContext());
+		showLoading(statusTask);
+		((SetStatusTask)statusTask).execute(light);
 	}
 
+	/**
+	 * @see com.robertdiamond.light.controller.tasks.SetStatusTask.SetStatusListener#onStatusReceived(boolean)
+	 */
+	public void onStatusReceived(boolean success) {
+		if (this.toggleButton != null) {
+			this.toggleButton.setEnabled(true);
+			this.toggleButton = null;
+		}
+		
+		if (success) {
+			Toast.makeText(this, R.string.lights_updated, Toast.LENGTH_SHORT);
+		} else {
+			Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT);
+			adapter.clear();
+			fetchStatus();
+		}
+	}
+	
 	/**
 	 * The user wants to change the light's color
 	 * @param view
@@ -209,6 +239,15 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		}
 	}
 
+	/**
+	 * Starts the QueryStatus AsyncTask
+	 */
+	private void fetchStatus() {
+		statusTask = new QueryStatusTask(this, this);
+		showLoading(statusTask);
+		((QueryStatusTask)statusTask).execute();
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.robertdiamond.light.util.BaseInterface#showLoading(android.os.AsyncTask)
 	 */
@@ -229,5 +268,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	public void hideLoading() {
 		baseInterface.hideLoading();
 	}
+
+	
 
 }

@@ -13,10 +13,10 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.robertdiamond.light.R;
 import com.robertdiamond.light.model.Light;
@@ -45,8 +45,6 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 		this.inflator = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layout = resource;
-		this.radioGroupListener = (OnCheckedChangeListener) context;
-
 	}
 
 	@Override
@@ -62,8 +60,7 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 				holder.speed = (TextView) convertView.findViewById(R.id.speed);
 				holder.speedBar = (SeekBar) convertView.findViewById(R.id.speedBar);
 				holder.colorButton = (Button) convertView.findViewById(R.id.color_button);
-				holder.radioGroup = (RadioGroup) convertView.findViewById(R.id.rg_all_lights);
-				holder.radioGroup.setOnCheckedChangeListener(radioGroupListener);
+				holder.toggleButton = (ToggleButton) convertView.findViewById(R.id.toggleLights);
 				holder.speedBar.setOnTouchListener(new SeekBarListener(holder));
 				
 				/* Text Strings */
@@ -83,8 +80,12 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 			holder.nodeId.setText(nodeId);
 			holder.speed.setText(Integer.toString(speed));
 			holder.speedBar.setProgress(speed);
+			holder.toggleButton.setChecked(color != Color.BLACK);
+			
 			holder.speedBar.setTag(position);
 			holder.colorButton.setTag(position);
+			holder.toggleButton.setTag(position);
+			
 			convertView.setBackgroundColor(color);
 			
 			/* Set contrasted color for text */
@@ -103,13 +104,13 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 	}
 
 	static class ViewHolder {
-		TextView text_speed;
-		RadioGroup radioGroup;
 		Button colorButton;
 		TextView nodeId;
+		ToggleButton toggleButton;
 		TextView speed;
 		SeekBar speedBar;
 		TextView text_chooseALight;
+		TextView text_speed;
 		
 	}
 

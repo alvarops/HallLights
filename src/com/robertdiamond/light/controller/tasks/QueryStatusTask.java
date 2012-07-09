@@ -7,17 +7,20 @@ import java.net.URL;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.robertdiamond.light.model.Light;
 import com.robertdiamond.light.model.Lights;
 import com.robertdiamond.light.util.HTTPUtil;
+import com.robertdiamond.light.util.Settings;
 
 /**
  * @author Alvaro Pereda
  *
  */
 public class QueryStatusTask extends AsyncTask<URL, Void, Lights> {
-
+	private static final String TAG = "QueryStatusTask";
+	
 	private QueryStatusListener listener;
 	private Context context;
 
@@ -31,9 +34,9 @@ public class QueryStatusTask extends AsyncTask<URL, Void, Lights> {
 	@Override
 	protected Lights doInBackground(URL... params) {
 		Lights lights = null;
-		
+		Log.d(TAG, "Start doInBackground");
 		try {
-			lights = (Lights) HTTPUtil.fetchURL("http://growing-rain-1729.heroku.com/pages/lights/query", Lights.class);
+			lights = (Lights) HTTPUtil.fetchURL(new StringBuffer(Settings.BASE_URL).append(Settings.BASE_URL_QUERY).toString(), Lights.class);
 			
 			for (Light light: lights.getLights()) {
 				System.out.println(light.getNodeId());
