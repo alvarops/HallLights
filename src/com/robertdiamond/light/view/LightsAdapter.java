@@ -74,9 +74,8 @@ public class LightsAdapter extends ArrayAdapter<Light> {
 
 			String nodeId = light.getNodeId();
 			int speed = light.getSpeed();
-			Integer color = Color.rgb(light.getRed(), light.getGreen(),
-					light.getBlue());
-
+			Integer color = light.getColor();
+			
 			holder.nodeId.setText(nodeId);
 			holder.speed.setText(Integer.toString(speed));
 			holder.speedBar.setProgress(speed);

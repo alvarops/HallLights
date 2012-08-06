@@ -39,11 +39,11 @@ public class QueryStatusTask extends AsyncTask<URL, Void, Lights> {
 			lights = (Lights) HTTPUtil.fetchURL(new StringBuffer(Settings.BASE_URL).append(Settings.BASE_URL_QUERY).toString(), Lights.class);
 			
 			for (Light light: lights.getLights()) {
-				System.out.println(light.getNodeId());
+				Log.d(TAG, light.getNodeId());
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getLocalizedMessage(), e);
 		}
 		
 		return lights;

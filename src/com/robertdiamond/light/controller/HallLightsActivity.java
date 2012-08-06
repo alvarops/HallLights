@@ -142,6 +142,12 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		
 		this.toggleButton = view;
 		
+		if (light.getColor() == Color.BLACK) {
+			light.setColor(Color.WHITE);
+		} else {
+			light.setColor(Color.BLACK);
+		}
+		
 		view.setEnabled(false);
 		statusTask = new SetStatusTask(this, getApplicationContext());
 		showLoading(statusTask);
@@ -158,10 +164,11 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		}
 		
 		if (success) {
-			Toast.makeText(this, R.string.lights_updated, Toast.LENGTH_SHORT);
+			Toast.makeText(this, R.string.lights_updated, Toast.LENGTH_SHORT).show();
+			adapter.notifyDataSetChanged();
+			hideLoading();
 		} else {
-			Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT);
-			adapter.clear();
+			Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
 			fetchStatus();
 		}
 	}
@@ -173,17 +180,18 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	public void onSelectColorClicked(final View view) {
 		int position = (Integer) view.getTag();
 		final Light light = adapter.getItem(position);
-		Integer color = Color.rgb(light.getRed(), light.getGreen(),
-				light.getBlue());
+		Integer color = light.getColor();
 		
 		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, color,
 				new OnAmbilWarnaListener() {
 
 					public void onOk(AmbilWarnaDialog dialog, int color) {
 						Log.d(TAG, "Changing color");
-						light.setBlue(Color.blue(color));
-						light.setGreen(Color.green(color));
-						light.setRed(Color.red(color));
+						light.setColor(color);
+						statusTask = new SetStatusTask(HallLightsActivity.this, getApplicationContext());
+						showLoading(statusTask);
+						((SetStatusTask)statusTask).execute(light);
+						
 						adapter.notifyDataSetChanged();
 					}
 
@@ -205,9 +213,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 		ColorPickerDialog dialog = new ColorPickerDialog(getApplicationContext(), new OnColorChangedListener() {
 			
 			public void colorChanged(int color) {
-				light.setBlue(Color.blue(color));
-				light.setRed(Color.red(color));
-				light.setGreen(Color.green(color));
+				light.setColor(color);
 				adapter.notifyDataSetChanged();
 			}
 			
@@ -234,6 +240,9 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	 * @param lights
 	 */
 	private void updateAdapter(Lights lights) {
+		if (lights == null)
+			return;
+		
 		for (Light light:lights.getLights()) {
 			adapter.add(light);
 		}
@@ -243,6 +252,7 @@ public class HallLightsActivity extends ListActivity implements QueryStatusListe
 	 * Starts the QueryStatus AsyncTask
 	 */
 	private void fetchStatus() {
+		adapter.clear();
 		statusTask = new QueryStatusTask(this, this);
 		showLoading(statusTask);
 		((QueryStatusTask)statusTask).execute();
